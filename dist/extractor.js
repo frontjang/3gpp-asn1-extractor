@@ -1,7 +1,7 @@
-var fs = require('fs');
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = require("fs");
 module.exports = exports = extract;
-
 var token = {
     ran2: {
         start: {
@@ -23,17 +23,17 @@ var token = {
             re: /^END$/gm,
         },
     },
-}
-
+};
 function extract(input) {
     if (input.indexOf(token.ran2.start.string) != -1) {
         var tk = token.ran2;
-    } else if (input.indexOf(token.ran3.start.string) != -1) {
+    }
+    else if (input.indexOf(token.ran3.start.string) != -1) {
         var tk = token.ran3;
-    } else {
+    }
+    else {
         throw 'Couldn\'t find known tokens';
     }
-
     var text = '';
     while (true) {
         let indexStart = input.search(tk.start.re);
@@ -41,19 +41,18 @@ function extract(input) {
             break;
         }
         let indexStop = input.substring(indexStart).search(tk.stop.re);
-        text += `${input.substring(indexStart,
-                                 indexStart + indexStop + tk.stop.string.length)
-                        .replace(/\uFFFD/g, '')}\n`;
+        text += `${input.substring(indexStart, indexStart + indexStop + tk.stop.string.length)
+            .replace(/\uFFFD/g, '')}\n`;
         input = input.substring(indexStart + indexStop + tk.stop.string.length);
     }
     return text;
 }
-
 if (require.main == module) {
     if (process.argv.length >= 3) {
-        let input = fs.readFileSync(process.argv[2], 'utf8');
+        let input = fs_1.readFileSync(process.argv[2], 'utf8');
         console.log(extract(input));
-    } else {
+    }
+    else {
         console.log('Usage: node extractor <file_name>');
         console.log('  ex : node extractor 36331-f10.txt');
     }
