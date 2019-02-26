@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
+var WordExtractor = require("word-extractor");
+var extractor = new WordExtractor();
+
 module.exports = exports = extract;
 var token = {
     ran2: {
@@ -49,11 +52,13 @@ function extract(input) {
 }
 if (require.main == module) {
     if (process.argv.length >= 3) {
-        let input = fs_1.readFileSync(process.argv[2], 'utf8');
-        console.log(extract(input));
+        var extracted = extractor.extract(process.argv[2]);
+		extracted.then(function(doc) {
+			console.log(extract(doc.getBody()));
+		});
     }
     else {
         console.log('Usage: node extractor <file_name>');
-        console.log('  ex : node extractor 36331-f10.txt');
+        console.log('  ex : node extractor 36331-f10.doc');
     }
 }
